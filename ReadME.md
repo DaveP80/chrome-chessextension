@@ -26,5 +26,6 @@ Click the "Move Advise" button to get a great hint.
 This extension is available on the normal chrome store, but the chrome
 store version does not include chess.com usage.
 [chrome store link](https://chromewebstore.google.com/detail/chess-helper/gcgjgjnjjgbdepbhdecjnjmcfhlalghn)
+<br/>
 ![image one](resized02.png)
 ![image two](resizedsixforimage.png)
