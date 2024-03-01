@@ -7,6 +7,8 @@ git clone <directory>
 watch this video on how to load a chrome extension from your file system
 [video link](https://www.youtube.com/watch?v=oswjtLwCUqg)
 
+Load the src folder.
+
 ## Using this extension
 
 This program gives top stockfish move advice on any actively playing game
