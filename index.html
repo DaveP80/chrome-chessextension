@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lichess and FEN Tool</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+        padding: 0.25rem 0.5rem;
+      }
+      button {
+        padding: 0.5rem 1rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      #bestmove,
+      #besteval {
+        font-size: 18px;
+      }
+
+      #bestmove {
+        margin-left: 0.5rem;
+      }
+
+      #numlookup {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        max-width: fit-content;
+      }
+
+      #xylookup {
+        display: flex;
+        justify-content: space-around;
+        max-width: 400px;
+      }
+
+      .moveadvice {
+        margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .feneval {
+        display: none;
+        min-height: 2rem;
+        margin-bottom: 10px;
+      }
+
+      #bestmove-container {
+        display: grid;
+        grid-template-columns: auto auto;
+      }
+
+      label {
+        color: #666;
+      }
+      input[type="text"] {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-top: 5px;
+        width: 13rem;
+      }
+      input[type="submit"] {
+        padding: 0.5rem 1rem;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+      .board-container {
+        width: 400px;
+        height: 400px;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        display: grid;
+      }
+      .white {
+        height: 50px;
+        width: 50px;
+        background-color: #af9361;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+      }
+
+      .black {
+        height: 50px;
+        width: 50px;
+        background: rgb(82, 55, 40);
+        background: linear-gradient(
+          252deg,
+          rgba(82, 55, 40, 0.9483568075117371) 0%,
+          rgba(82, 55, 40, 1) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+      }
+
+      #dynamicView,
+      #showboard {
+        margin-left: 15px;
+      }
+
+      #gameview {
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-template-rows: auto auto;
+        max-width: 420px;
+      }
+
+      .toggleswitches {
+        margin-bottom: 0.5rem;
+        margin-top: 0.5rem;
+        display: flex;
+        justify-content: start;
+      }
+      .toggle {
+        --width: 40px;
+        --height: calc(var(--width) / 2);
+        --border-radius: calc(var(--height) / 2);
+
+        display: inline-block;
+        cursor: pointer;
+      }
+      .toggle__input {
+        display: none;
+      }
+      .toggle__fill {
+        position: relative;
+        width: var(--width);
+        height: var(--height);
+        border-radius: var(--border-radius);
+        background: #dddddd;
+        transition: background 0.2s;
+      }
+      .toggle__fill::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: var(--height);
+        width: var(--height);
+        background: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+        border-radius: var(--border-radius);
+        transition: transform 0.2s;
+      }
+      .toggle__input:checked ~ .toggle__fill {
+        background: #009578;
+      }
+
+      .toggle__input:checked ~ .toggle__fill::after {
+        transform: translateX(var(--height));
+      }
+      .loading-spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #3498db;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        animation: spin 1s linear infinite;
+        display: none;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      @media (max-width: "800px") {
+        .board-container {
+          width: 240px;
+          height: 240px;
+        }
+        .white,
+        .black {
+          width: 30px;
+          height: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="moveadvice">
+      <div>
+        <button type="click" id="chessBtn">Move Advice</button>
+        <div id="bestmove-container">
+          <img
+            alt="avatar"
+            style="display: none; width: 75px, height: auto"
+            id="app-avatar"
+          />
+
+          <div id="moveresult-container">
+            <p id="bestmove"></p>
+            <div style="margin-left: 1rem" class="loading-spinner"></div>
+          </div>
+        </div>
+      </div>
+      <div id="a4f4m4kl">
+        <img
+          id="profilelnk"
+          src="user.png"
+          width="20px"
+          height="20px"
+          style="cursor: pointer"
+        />
+      </div>
+    </section>
+    <section>
+      <form id="fenForm">
+        <label for="textInput">Paste FEN:</label><br />
+        <input type="text" id="textInput" name="textInput" placeholder="krbq" />
+        <input type="submit" value="Submit" />
+      </form>
+      <aside class="feneval" id="feneval">
+        <p id="besteval"></p>
+        <div style="margin-left: 1rem" class="loading-spinner"></div>
+      </aside>
+    </section>
+    <section id="vis-container">
+      <aside class="toggleswitches">
+        <label for="flipboard" style="font-size: 16px">flip board</label>
+        <label id="flipboard" class="toggle" for="myToggle">
+          <input class="toggle__input" name="" type="checkbox" id="myToggle" />
+          <div class="toggle__fill"></div>
+        </label>
+
+        <input
+          type="checkbox"
+          id="dynamicView"
+          name="view"
+          value="dynamic"
+          checked
+        />
+        <label for="dynamicView">dynamic view</label>
+        <input
+          type="checkbox"
+          id="showboard"
+          name="showboard"
+          value="show"
+          checked
+        />
+        <label for="showboard">show board</label>
+      </aside>
+      <div id="gameview">
+        <div class="board-container" id="chessboard">
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+          <div class="black"></div>
+          <div class="white"></div>
+        </div>
+      </div>
+    </section>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "chess helper",
+  "version": "1.6",
+  "description": "Assistant for chess.com and lichess.",
+  "minimum_chrome_version": "114",
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "permissions": [
+    "activeTab",
+    "sidePanel",
+    "tabs",
+    "contextMenus",
+    "scripting"
+  ],
+  "icons": {
+    "16": "pawn.png",
+    "48": "pawn.png",
+    "128": "pawn.png"
+  },
+  "host_permissions": ["https://*.chess.com/*", "https://*.lichess.org/*"]
+}

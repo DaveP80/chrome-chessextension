@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Lichess Helper</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        color: #333;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 25px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      header {
+        text-align: center;
+      }
+
+      .avatar-grid ul {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 10px;
+        max-height: 400px;
+        overflow-y: auto;
+        list-style: none;
+      }
+
+      .avatar-image-item {
+        max-width: 100%;
+        height: auto;
+      }
+
+      h1 {
+        color: #007bff;
+      }
+      p {
+        color: #666;
+        font-size: 18px;
+      }
+      main ul {
+        margin-top: 20px;
+        padding-left: 20px;
+      }
+      main ul li {
+        margin-bottom: 10px;
+        font-size: 17px;
+      }
+      a {
+        color: green;
+        font-size: 18px;
+      }
+      button {
+        display: block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      #selected-user {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+      }
+      #user-avatar,
+      #loading-spinner {
+        margin: 0.5rem;
+      }
+      #user-avatar-1 {
+        text-align: center;
+      }
+      #username-form {
+        background-color: #f0f0f0;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: fit-content;
+        margin: 0 auto;
+        display: flex;
+      }
+
+      #supportlink {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      label {
+        color: #333;
+        font-size: 16px;
+        display: block;
+      }
+
+      input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 16px;
+      }
+
+      input[type="submit"] {
+        background-color: #007bff;
+        color: #fff;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-left: 5px;
+      }
+      input[type="submit"]:hover {
+        background-color: #0056b3;
+      }
+
+      .profile-card {
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-width: 16rem;
+        margin-bottom: 20px;
+      }
+
+      .profile-card p {
+        color: #333;
+        font-size: 16px;
+        text-align: center;
+      }
+      #loading-spinner {
+        animation: "";
+      }
+
+      @keyframes loading-spinner {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .modal {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      .modal-content {
+        margin: 15% auto;
+        border: 1px solid #888;
+        max-width: fit-content;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .close {
+        color: black;
+        font-size: 28px;
+        margin: 5px;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <main>
+        <header>
+          <h1>Welcome to Online Chess Helper</h1>
+        </header>
+        <p>
+          Right click on a chess.com or lichess active game page to open the
+          side panel. This extension appears in the context menu. You can toggle
+          the extension sidebar by clicking the icon.
+        </p>
+        <ul>
+          <li>
+            Click on "Move Advice" to get the top recommended Stockfish move.
+          </li>
+          <li>
+            You can at any time copy and paste the FEN string into the form text
+            field to get the top Stockfish move in that position. The FEN
+            analysis runs at a deeper depth.
+          </li>
+          <li>
+            <div
+              style="display: flex, justify-content: space-between, align-items: left"
+            >
+              <a href="https://lichess.org">Lichess.org</a>
+              <a href="https://chess.com">chess.com</a>
+            </div>
+          </li>
+          <li>
+            <p id="supportlink">Support this Creator</p>
+          </li>
+        </ul>
+
+        <div id="myModal" class="modal" hidden>
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <img
+              alt="bmac"
+              src="bmc_qr.png"
+              id="supportpic"
+              width="250px"
+              height="auto"
+            />
+          </div>
+        </div>
+        <button id="openSidePanel">Open the Chess Helper</button>
+      </main>
+      <section id="profile">
+        <aside id="selected-user">
+          <svg
+            width="64px"
+            height="64px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            id="loading-spinner"
+            style="cursor: pointer"
+          >
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g
+              id="SVGRepo_tracerCarrier"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></g>
+            <g id="SVGRepo_iconCarrier">
+              <path
+                d="M11 2L13 3.99545L12.9408 4.05474M13 18.0001L11 19.9108L11.0297 19.9417M12.9408 4.05474L11 6M12.9408 4.05474C12.6323 4.01859 12.3183 4 12 4C7.58172 4 4 7.58172 4 12C4 14.5264 5.17107 16.7793 7 18.2454M17 5.75463C18.8289 7.22075 20 9.47362 20 12C20 16.4183 16.4183 20 12 20C11.6716 20 11.3477 19.9802 11.0297 19.9417M13 22.0001L11.0297 19.9417"
+                stroke="#000000"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </g>
+          </svg>
+          <aside class="profile-card" id="profile-howto">
+            <p>
+              You can set your profile along with an avatar image.<br />Enter
+              your username and click the rotate icon to load a previously saved
+              profile.<br />Type 'hide' in the Fen input field to hide avatar at
+              any time.
+            </p>
+          </aside>
+        </aside>
+
+        <form id="username-form">
+          <label for="username-input">♕ ♘ ♔ username:</label><br />
+          <input
+            type="text"
+            id="username-input"
+            name="username-input"
+            placeholder="username"
+          /><br /><br />
+          <input id="userform-btn" type="submit" value="Submit" />
+        </form>
+        <div id="avatar-container" class="avatar-grid">
+          <ul id="avatar-list"></ul>
+        </div>
+      </section>
+
+      <script src="extension.js" type="module"></script>
+    </div>
+  </body>
+</html>
