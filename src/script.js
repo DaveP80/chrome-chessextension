@@ -113,14 +113,16 @@ if (!si) {
 // Add event listener for storage events
 window.addEventListener("storage", function (event) {
   if (event.key === "chesshelper") {
-    let jsonobj = JSON.parse(event.newValue);
-    z.setAttribute("src", jsonobj["img"]);
-    z.style.display = "block";
-    hh[0].style = "width: 75px, height: auto";
-    qm.style = "margin: 0 0";
+    let jsonobj = JSON.parse(event.newValue) || {};
+    if (jsonobj.hasOwnProperty("img")) {
+      z.setAttribute("src", jsonobj["img"]);
+      z.style.display = "block";
+      hh[0].style = "width: 75px, height: auto";
+      qm.style = "margin: 0 0";
+    }
   }
   if (event.key === "boardview") {
-    boardview = event.newValue;
+    boardview = event.newValue || "lichess";
     renderBoard({ board });
   }
 });
