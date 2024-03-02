@@ -13,7 +13,7 @@ Load the src folder.
 
 This program gives top stockfish move advice on any actively playing game
 on chess.com and lichess.org.
-Click the "Move Advise" button to get a great hint.
+Click the "Move Advice" button to get a great hint.
 
 ## Bonus
 
@@ -29,5 +29,5 @@ This extension is available on the normal chrome store, but the chrome
 store version does not include chess.com usage.
 [chrome store link](https://chromewebstore.google.com/detail/chess-helper/gcgjgjnjjgbdepbhdecjnjmcfhlalghn)
 <br/>
-![image one](resized02.png)
-![image two](resizedsixforimage.png)
+![image one](src/resized02.png)
+![image two](src/resizedsixforimage.png)
