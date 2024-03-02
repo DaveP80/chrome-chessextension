@@ -4,7 +4,7 @@
 git clone <directory>
 ```
 
-watch this video on how to load a chrome extension from your file system
+watch this video on how to load a chrome extension from your file system.
 [video link](https://www.youtube.com/watch?v=oswjtLwCUqg)
 
 Load the src folder.
