@@ -300,6 +300,18 @@ avatarUrls.forEach((url, idx) => {
   ulcontainer.appendChild(li);
 });
 
+let flipboardelem = document.getElementById("flipview");
+let myToggle = document.getElementById("myToggle");
+let bv = localStorage.getItem("boardview");
+
+if (!bv) {
+  localStorage.setItem("boardview", "lichess");
+  bv = "lichess";
+}
+if (bv == "chess.com") {
+  myToggle.checked = true;
+}
+
 document
   .getElementById("username-form")
   .addEventListener("submit", async function (e) {
@@ -437,3 +449,19 @@ window.onclick = function (event) {
     modal.hidden = true;
   }
 };
+
+flipboardelem.addEventListener("change", function () {
+  if (bv == "lichess") {
+    myToggle.checked = true;
+    localStorage.setItem("boardview", "chess.com");
+    bv = "chess.com";
+  } else if (bv == "chess.com") {
+    localStorage.setItem("boardview", "lichess");
+    myToggle.checked = false;
+    bv = "lichess";
+  } else {
+    localStorage.setItem("boardview", "lichess");
+    myToggle.checked = false;
+    bv = "lichess";
+  }
+});

@@ -59,7 +59,6 @@
       }
       button {
         display: block;
-        margin-top: 20px;
         padding: 10px 20px;
         background-color: #007bff;
         color: #fff;
@@ -146,6 +145,11 @@
         animation: "";
       }
 
+      #flipview-l {
+        font-size: 18px;
+        margin-left: 10px;
+      }
+
       @keyframes loading-spinner {
         from {
           transform: rotate(0deg);
@@ -185,6 +189,50 @@
         color: black;
         text-decoration: none;
         cursor: pointer;
+      }
+      .toggleswitches {
+        margin-bottom: 0.5rem;
+        display: flex;
+        justify-content: start;
+        align-items: first baseline;
+      }
+      .toggle {
+        --width: 40px;
+        --height: calc(var(--width) / 2);
+        --border-radius: calc(var(--height) / 2);
+
+        display: inline-block;
+        cursor: pointer;
+      }
+      .toggle__input {
+        display: none;
+      }
+      .toggle__fill {
+        position: relative;
+        width: var(--width);
+        height: var(--height);
+        border-radius: var(--border-radius);
+        background: #dddddd;
+        transition: background 0.2s;
+      }
+      .toggle__fill::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: var(--height);
+        width: var(--height);
+        background: #ffffff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+        border-radius: var(--border-radius);
+        transition: transform 0.2s;
+      }
+      .toggle__input:checked ~ .toggle__fill {
+        background: #009578;
+      }
+
+      .toggle__input:checked ~ .toggle__fill::after {
+        transform: translateX(var(--height));
       }
     </style>
   </head>
@@ -233,7 +281,19 @@
             />
           </div>
         </div>
-        <button id="openSidePanel">Open the Chess Helper</button>
+        <aside class="toggleswitches">
+          <button id="openSidePanel">Open the Chess Helper</button>
+          <label for="flipview" id="flipview-l">chess.com board style</label>
+          <label id="flipview" class="toggle" for="myToggle">
+            <input
+              class="toggle__input"
+              name=""
+              type="checkbox"
+              id="myToggle"
+            />
+            <div class="toggle__fill"></div>
+          </label>
+        </aside>
       </main>
       <section id="profile">
         <aside id="selected-user">

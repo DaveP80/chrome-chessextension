@@ -18,6 +18,7 @@ Click the "Move Advice" button to get a great hint.
 ## Bonus
 
 - UI that shows the board, with the ability to rotate the board.
+- Chess.com or Lichess theme board, your choice.
 - FEN position analyzer. Copy and paste your FEN string at any time!
 - Avatar Selector. If you want an avatar, enter your username and select from
   the list, and your setting is saved.
@@ -31,3 +32,4 @@ store version does not include chess.com usage.
 <br/>
 ![image one](src/resized02.png)
 ![image two](src/resizedsixforimage.png)
+<img src="src/chesscomview.png" alt="image three"  width="430px" height="621px"/>
