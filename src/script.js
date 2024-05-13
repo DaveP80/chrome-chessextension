@@ -556,14 +556,17 @@ function formatMoveString(moveString) {
     if (part === "bestmove" || part === "ponder") {
       formattedParts.push(part);
     } else {
-      if (part.length === 4) {
+      if (part.length === 4 || part.length === 5) {
         const fromSquare = part.substring(0, 2);
         const toSquare = part.substring(2, 4);
+        const promotion = part.length === 5 ? part.charAt(4) : null;
         if (!parts.slice(0, i).includes("ponder")) {
           bmfromsq = fromSquare;
           bmtosq = toSquare;
         }
-        formattedParts.push(fromSquare + " ⇾ " + toSquare);
+        formattedParts.push(
+          fromSquare + " ⇾ " + toSquare + (promotion ? `*${promotion}*` : ""),
+        );
       } else {
         formattedParts.push(part);
       }
