@@ -88,7 +88,6 @@ button.addEventListener("click", async function () {
 
           if (cloudfuncjson.hasOwnProperty("data")) {
             mySet.add(gameid);
-            console.log(mySet);
             let [movestring, bstmvfromsqr, bstmvtosqr] = formatMoveString(
               cloudfuncjson.data,
             );
