@@ -16,6 +16,37 @@ let boardview = localStorage.getItem("boardview");
 
 let orient = "white";
 
+class CustomSet extends Set {
+  constructor(storageKey, ...args) {
+    super(...args);
+    this.storageKey = storageKey;
+    this.loadFromStorage();
+  }
+
+  add(value) {
+    if (!this.has(value)) {
+      super.add(value);
+      this.saveToStorage();
+    }
+    return this;
+  }
+
+  loadFromStorage() {
+    const storedData = localStorage.getItem(this.storageKey);
+    if (storedData) {
+      const parsedData = JSON.parse(storedData);
+      parsedData.forEach((item) => super.add(item));
+    }
+  }
+
+  saveToStorage() {
+    const data = Array.from(this);
+    localStorage.setItem(this.storageKey, JSON.stringify(data));
+  }
+}
+
+const mySet = new CustomSet(`${new Date().toLocaleDateString()}-lichess`);
+
 let hh = document.getElementsByClassName("loading-spinner");
 let gmvtog = document.getElementById("gameview");
 
@@ -52,11 +83,12 @@ button.addEventListener("click", async function () {
           let nn = document.getElementById("bestmove");
           hh[0].style.display = "block";
           nn.style.paddingTop = "0";
-
           let cloudfuncjson = await cloudFunction(gameid);
           nn.style.paddingTop = "0.25rem";
 
           if (cloudfuncjson.hasOwnProperty("data")) {
+            mySet.add(gameid);
+            console.log(mySet);
             let [movestring, bstmvfromsqr, bstmvtosqr] = formatMoveString(
               cloudfuncjson.data,
             );
