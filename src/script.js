@@ -234,9 +234,9 @@ chrome.runtime.onMessage.addListener(async (message) => {
       appendto = message.data.join("%20");
     }
     try {
+      let nn = document.getElementById("bestmove");
       if (appendto) {
         document.getElementById("bestmove").textContent = "";
-        let nn = document.getElementById("bestmove");
         hh[0].style.display = "block";
         nn.style.paddingTop = "0";
 
