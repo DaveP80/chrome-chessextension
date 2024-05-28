@@ -48,8 +48,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     };
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const tab = tabs[0];
-      let checkurl = tab.url;
-      if (checkurl.includes("chess.com")) {
+      let checkurl = tab?.url;
+      if (checkurl && checkurl.includes("chess.com")) {
         chrome.scripting.executeScript(
           {
             target: { tabId: tab.id },

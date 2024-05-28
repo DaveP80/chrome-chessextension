@@ -3,21 +3,27 @@ function scrapeMovesFromPage() {
     let wfig = null;
     let bfig = null;
     if (wm) {
-      wfig = wm.getElementsByTagName("span")[0];
+      wfig = wm.getElementsByTagName("span");
     }
     if (bm) {
-      bfig = bm.getElementsByTagName("span")[0];
+      bfig = bm.getElementsByTagName("span");
     }
     if (wfig) {
-      wfig = wfig.getAttribute("data-figurine");
+      if (wfig.length > 1) wfig = wfig[1].getAttribute("data-figurine");
+      else wfig = null;
     }
     if (bfig) {
-      bfig = bfig.getAttribute("data-figurine");
+      if (bfig.length > 1) bfig = bfig[1].getAttribute("data-figurine");
+      else bfig = null;
     }
     return [wfig, bfig];
   }
-  let wmoves = document.body.getElementsByClassName("white node");
-  let bmoves = document.body.getElementsByClassName("black node");
+  let wmoves = document.body.getElementsByClassName(
+    "node white-move main-line-ply",
+  );
+  let bmoves = document.body.getElementsByClassName(
+    "node black-move main-line-ply",
+  );
   let om = document.body.getElementsByClassName("eco-opening-name");
   om = Array.from(om);
   wmoves = Array.from(wmoves);
@@ -34,6 +40,7 @@ function scrapeMovesFromPage() {
   let movearray = [];
   if (wmoves.length || bmoves.length) {
     let l = Math.min(wmoves.length, bmoves.length);
+
     for (let i = 0; i < l; i++) {
       let [z, y] = getNotation(wmoves[i], bmoves[i]);
 
@@ -54,7 +61,11 @@ function scrapeMovesFromPage() {
       }
     }
   }
-  chrome.runtime.sendMessage({ data: movearray, action: "scrapedData" });
+  let finalarr = movearray.map((item) => item.replaceAll(/\s/g, ""));
+  chrome.runtime.sendMessage({
+    data: finalarr,
+    action: "scrapedData",
+  });
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
