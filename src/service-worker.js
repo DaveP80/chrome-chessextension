@@ -26,6 +26,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "open_main") {
     chrome.tabs.create({ url: "page.html" });
   }
+  if (message.action === "open_table") {
+    chrome.tabs.create({ url: "data_table.html" });
+  }
   (async () => {
     if (message.type === "open_side_panel") {
       await chrome.sidePanel.open({ tabId: sender.tab.id });

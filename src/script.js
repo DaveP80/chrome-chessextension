@@ -220,7 +220,7 @@ toggleboard.addEventListener("change", function () {
   }
 });
 
-var profiletoggle = document.getElementById("profilelnk");
+let profiletoggle = document.getElementById("profilelnk");
 profiletoggle.addEventListener("click", function () {
   chrome.runtime.sendMessage({ action: "open_main" });
 });
