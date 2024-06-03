@@ -361,7 +361,6 @@ document
               }
               document.getElementById("profile-howto").style.maxWidth = "16rem";
 
-              // Save data to localStorage
               const userData = { user: inputValue, img: selectedUrl };
               localStorage.setItem("chesshelper", JSON.stringify(userData));
             }
@@ -464,4 +463,26 @@ flipboardelem.addEventListener("change", function () {
     myToggle.checked = false;
     bv = "lichess";
   }
+});
+
+for (let i = 0; i < localStorage.length; i++) {
+  const key = localStorage.key(i);
+  let g = key.substring(0, key.length - 8);
+  let b = new Date(g);
+  if (b.toString() == "Invalid Date") continue;
+
+  if (key.includes("lichess")) {
+    const data = JSON.parse(localStorage.getItem(key));
+
+    if (Array.isArray(data)) {
+      let chli = document.getElementById("dtopt");
+      chli.style.display = "list-item";
+      break;
+    }
+  }
+}
+
+var opendata = document.getElementById("datatable");
+opendata.addEventListener("click", function () {
+  chrome.runtime.sendMessage({ action: "open_table" });
 });
