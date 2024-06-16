@@ -16,6 +16,8 @@ let boardview = localStorage.getItem("boardview");
 
 let orient = "white";
 
+let chesscom_gameid = null;
+
 class CustomSet extends Set {
   constructor(storageKey, ...args) {
     super(...args);
@@ -117,6 +119,10 @@ button.addEventListener("click", async function () {
         hh[0].style.display = "none";
       }
     } else if (currentUrl.includes("chess.com")) {
+      let t = currentUrl.split("/");
+      if (t[t.length - 1].length > 10 && Number.isInteger(+t[t.length - 1])) {
+        chesscom_gameid = t[t.length - 1];
+      }
       chrome.runtime.sendMessage({ action: "scrapeData" });
     } else {
       return;
@@ -239,6 +245,9 @@ chrome.runtime.onMessage.addListener(async (message) => {
         document.getElementById("bestmove").textContent = "";
         hh[0].style.display = "block";
         nn.style.paddingTop = "0";
+        if (chesscom_gameid) {
+          appendto += "%20" + chesscom_gameid.toString();
+        }
 
         let cloudfuncjson = await chesscom(appendto);
         nn.style.paddingTop = "0.25rem";
@@ -272,6 +281,7 @@ chrome.runtime.onMessage.addListener(async (message) => {
       console.error(e);
     } finally {
       hh[0].style.display = "none";
+      chesscom_gameid = null;
     }
   }
 });
