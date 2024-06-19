@@ -16,6 +16,8 @@ let boardview = localStorage.getItem("boardview");
 
 let orient = "white";
 
+let blitz = false;
+
 let chesscom_gameid = null;
 
 class CustomSet extends Set {
@@ -213,6 +215,14 @@ flipboardelem.addEventListener("change", function () {
   flipBoard();
 });
 
+let blitzviz = document.getElementById("blitztoggle");
+document.getElementById("speedy").addEventListener("click", function () {
+  blitz = !blitz;
+  if (blitz) {
+    blitzviz.style.color = "green";
+  } else blitzviz.style.color = "darkgray";
+});
+
 var toggleboard = document.getElementById("showboard");
 toggleboard.addEventListener("change", function () {
   let gameboard = document.getElementById("gameview");
@@ -373,7 +383,7 @@ function coordinates() {
 async function chesscom(args) {
   try {
     const response = await fetch(
-      `https://stockfishapi-jh4a3z47hq-uk.a.run.app/chesscom/?moves=${args}`,
+      `https://stockfishapi-jh4a3z47hq-uk.a.run.app/chesscom/?moves=${args}${blitz ? "&time=go" : ""}`,
     );
 
     if (!response.ok) {
@@ -407,7 +417,7 @@ async function evalFen(args) {
 async function cloudFunction(args) {
   try {
     const response = await fetch(
-      `https://stockfishapi-jh4a3z47hq-uk.a.run.app/suggest-move/${args}`,
+      `https://stockfishapi-jh4a3z47hq-uk.a.run.app/suggest-move/${args}${blitz ? "?time=go" : ""}`,
     );
 
     if (!response.ok) {
