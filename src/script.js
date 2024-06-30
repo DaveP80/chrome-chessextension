@@ -256,10 +256,10 @@ chrome.runtime.onMessage.addListener(async (message) => {
         hh[0].style.display = "block";
         nn.style.paddingTop = "0";
         if (chesscom_gameid) {
-          appendto += "%20" + chesscom_gameid.toString();
+          chesscom_gameid = chesscom_gameid.toString();
         }
 
-        let cloudfuncjson = await chesscom(appendto);
+        let cloudfuncjson = await chesscom(appendto, chesscom_gameid);
         nn.style.paddingTop = "0.25rem";
 
         if (cloudfuncjson.hasOwnProperty("data")) {
@@ -380,10 +380,10 @@ function coordinates() {
   return [divh, divu];
 }
 
-async function chesscom(args) {
+async function chesscom(args, chcomid) {
   try {
     const response = await fetch(
-      `https://stockfishapi-jh4a3z47hq-uk.a.run.app/chesscom/?moves=${args}${blitz ? "&time=go" : ""}`,
+      `https://stockfishapi-jh4a3z47hq-uk.a.run.app/chesscom/?moves=${args}&gameid=${chcomid || ""}${blitz ? "&time=go" : ""}`,
     );
 
     if (!response.ok) {
