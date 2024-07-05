@@ -22,6 +22,7 @@ Click the "Move Advice" button to get a great hint.
 - FEN position analyzer. Copy and paste your FEN string at any time!
 - Avatar Selector. If you want an avatar, enter your username and select from
   the list, and your setting is saved.
+- Click the "Blitz" clock to get a 50% faster server response.
 - Runs on stockfish version 14.
 
 ## From the chrome store
