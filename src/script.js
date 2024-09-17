@@ -95,6 +95,14 @@ button.addEventListener("click", async function () {
             let [movestring, bstmvfromsqr, bstmvtosqr] = formatMoveString(
               cloudfuncjson.data,
             );
+
+          if (cloudfuncjson.evaluation.type === "cp") {
+                        movestring += ` eval: ${(+cloudfuncjson.evaluation.value/100).toFixed(2)}`
+                      } else if (cloudfuncjson.evaluation.type === "mate") {
+                        movestring += ` mate: ${cloudfuncjson.evaluation.value}`
+                      }
+
+
             nn.textContent = movestring;
             if (cloudfuncjson.hasOwnProperty("board")) {
               renderBoard(cloudfuncjson, bstmvfromsqr, bstmvtosqr);
@@ -195,6 +203,11 @@ document
         let [evalstring, bstmvfromsqr, bstmvtosqr] = formatMoveString(
           response.data,
         );
+          if (response.evaluation.type === "cp") {
+                        evalstring += ` eval: ${(+response.evaluation.value/100).toFixed(2)}`
+                      } else if (response.evaluation.type === "mate") {
+                        evalstring += ` mate: ${response.evaluation.value}`
+                      }
         document.getElementById("besteval").textContent = evalstring;
         if (response.hasOwnProperty("board")) {
           renderBoard(response, bstmvfromsqr, bstmvtosqr);
@@ -266,6 +279,11 @@ chrome.runtime.onMessage.addListener(async (message) => {
           let [movestring, bstmvfromsqr, bstmvtosqr] = formatMoveString(
             cloudfuncjson.data,
           );
+          if (cloudfuncjson.evaluation.type === "cp") {
+                        movestring += ` eval: ${(+cloudfuncjson.evaluation.value/100).toFixed(2)}`
+                      } else if (cloudfuncjson.evaluation.type === "mate") {
+                        movestring += ` mate: ${cloudfuncjson.evaluation.value}`
+                      }
           nn.textContent = movestring;
           if (cloudfuncjson.hasOwnProperty("board")) {
             renderBoard(cloudfuncjson, bstmvfromsqr, bstmvtosqr);
@@ -599,14 +617,11 @@ function flipBoard() {
 
 function formatMoveString(moveString) {
   const parts = moveString.split(/\s+/);
-  const formattedParts = [];
+  const formattedParts = ["bestmove"];
   let bmfromsq = "";
   let bmtosq = "";
   for (let i = 0; i < parts.length; i++) {
     const part = parts[i];
-    if (part === "bestmove" || part === "ponder") {
-      formattedParts.push(part);
-    } else {
       if (part.length === 4 || part.length === 5) {
         const fromSquare = part.substring(0, 2);
         const toSquare = part.substring(2, 4);
@@ -621,7 +636,7 @@ function formatMoveString(moveString) {
       } else {
         formattedParts.push(part);
       }
-    }
+    
   }
   return [formattedParts.join("\n"), bmfromsq, bmtosq];
 }
