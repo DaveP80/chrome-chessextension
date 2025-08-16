@@ -24,16 +24,7 @@ function scrapeMovesFromPage() {
   let bmoves = document.body.getElementsByClassName(
     "node black-move main-line-ply",
   );
-  let om = document.body.getElementsByClassName("eco-opening-name");
-  om = Array.from(om);
-  wmoves = Array.from(wmoves);
-  bmoves = Array.from(bmoves);
-  om = om.some(
-    (item) =>
-      item.textContent.includes("Starting") ||
-      item.textContent.includes("Starting Position"),
-  );
-  if (om) {
+  if (!wmoves || wmoves.length == 0) {
     chrome.runtime.sendMessage({ data: ["newgame"], action: "scrapedData" });
     return;
   }
